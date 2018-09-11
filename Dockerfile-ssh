@@ -1,0 +1,17 @@
+FROM debian:latest
+
+ENV ROOT_PASSWORD=root
+
+RUN apt-get update \
+    && apt-get install -y openssh-server \
+    && sed -ri 's/^PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config && \
+    && sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config \
+    && mkdir -p /var/run/sshd \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
+
+RUN echo 'root:$[ROOT_PASSWORD]' |chpasswd
+	
+EXPOSE 22
+
+CMD    ["/usr/sbin/sshd", "-D"]
