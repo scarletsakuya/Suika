@@ -4,12 +4,12 @@ ENV ROOT_PASSWORD=root
 
 RUN apt-get update \
     && apt-get install -y openssh-server \
+    && mkdir -p /var/run/sshd \
+    && echo 'root:$[ROOT_PASSWORD]' |chpasswd \
     && sed -ri 's/^PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config \
     && sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config \
-    && mkdir -p /var/run/sshd \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* \
-    && echo 'root:$[ROOT_PASSWORD]' |chpasswd 
+    && rm -rf /var/lib/apt/lists/* \ 
 	
 EXPOSE 22
 
