@@ -8,9 +8,8 @@ RUN apt-get update \
     && sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config \
     && mkdir -p /var/run/sshd \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* 
-
-RUN echo 'root:$[ROOT_PASSWORD]' |chpasswd
+    && rm -rf /var/lib/apt/lists/* \
+    && echo 'root:$[ROOT_PASSWORD]' |chpasswd 
 	
 EXPOSE 22
 
