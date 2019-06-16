@@ -8,6 +8,12 @@ RUN /tmp/go.sh
 
 FROM alpine:latest
 
+RUN apk update && \
+    apk upgrade && \
+    apk add ca-certificates && update-ca-certificates && \
+    apk add --update tzdata
+ENV TZ=Asia/Shanghai
+
 COPY --from=builder /usr/bin/v2ray/v2ray /usr/bin/v2ray/
 COPY --from=builder /usr/bin/v2ray/v2ctl /usr/bin/v2ray/
 COPY --from=builder /usr/bin/v2ray/geoip.dat /usr/bin/v2ray/
@@ -19,16 +25,17 @@ RUN set -ex && \
     apk --no-cache add ca-certificates && \
     mkdir /var/log/v2ray/ &&\
     chmod +x /usr/bin/v2ray/v2ctl && \
-    chmod +x /usr/bin/v2ray/v2ray
+    chmod +x /usr/bin/v2ray/v2ray && \
+    rm -rf /var/cache/apk/*
 
 # vmess
-ENV VMESS_PORT=9999
+ENV VMESS_PORT=5061
 ENV VMESS_ID=00000000-0000-0000-0000-000000000000
 ENV VMESS_LEVEL=1
 ENV VMESS_ALTERID=64
 
 # kcp
-ENV KCP_PORT_VMESS=9999
+ENV KCP_PORT_VMESS=5061
 ENV KCP_MUT=1350
 ENV KCP_TTI=50
 ENV KCP_UPLINK=5
