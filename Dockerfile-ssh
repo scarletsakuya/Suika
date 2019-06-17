@@ -4,13 +4,14 @@ ENV ROOT_PASSWORD=root
 #    LC_ALL=en_US.UTF-8 \
 #    TZ=Asia/Shanghai
 
-#RUN apt-get update \
-#    && apt-get install -y openssh-server bash locales \
+RUN apt-get update \
+    && apt-get install -y openssh-server bash \
+#    locales \
 #    && locale-gen ${LC_ALL} \
 #    && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
 #    && echo "${TZ}" > /etc/timezone \
 #    && dpkg-reconfigure -f noninteractive tzdata \
-RUN mkdir -p /var/run/sshd \
+    && mkdir -p /var/run/sshd \
     && echo root:${ROOT_PASSWORD} |chpasswd \
     && sed -i "s/^#UsePrivilegeSeparation.*$/UsePrivilegeSeparation no/g" /etc/ssh/sshd_config \
     && sed -i 's/^#PermitRootLogin.*$/PermitRootLogin yes/' /etc/ssh/sshd_config \
