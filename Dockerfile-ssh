@@ -5,7 +5,7 @@ ENV ROOT_PASSWORD=root \
     TZ=Asia/Shanghai
 
 RUN apt-get update \
-    && apt-get install -y openssh-server bash local \
+    && apt-get install -y openssh-server bash locales \
     && locale-gen ${LC_ALL} \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
     && echo "${TZ}" > /etc/timezone \
