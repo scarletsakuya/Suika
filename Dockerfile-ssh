@@ -19,7 +19,7 @@ RUN apt-get update \
     && apt-get autoremove \
     && rm -rf /tmp/* /root/.cache /var/lib/apt/lists/*
     
-COPY ssh.sh /usr/local/bin/
+COPY ssh.sh /usr/local/bin/ssh.sh
 	
 EXPOSE 22/tcp
 
