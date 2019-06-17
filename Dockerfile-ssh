@@ -1,6 +1,6 @@
 FROM debian:latest
 
-ENV ROOT_PASSWORD=root \
+ENV ROOT_PASSWORD=root
 #    LC_ALL=en_US.UTF-8 \
 #    TZ=Asia/Shanghai
 
