@@ -8,6 +8,4 @@ mkdir -p -m 0755 /var/run/sshd
 
 echo "Start Success !"
 
-cat /etc/v2ray/config.json
-
 (/usr/sbin/sshd -D -e ) &
