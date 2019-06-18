@@ -6,22 +6,18 @@ ENV ROOT_PASSWORD=root
 
 RUN apt-get update \
     && apt-get install -y openssh-server bash \
-#    locales \
-#    && locale-gen ${LC_ALL} \
-#    && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
-#    && echo "${TZ}" > /etc/timezone \
-#    && dpkg-reconfigure -f noninteractive tzdata \
     && mkdir -p /var/run/sshd \
     && echo root:${ROOT_PASSWORD} |chpasswd \
     && sed -i "s/^#UsePrivilegeSeparation.*$/UsePrivilegeSeparation no/g" /etc/ssh/sshd_config \
     && sed -i 's/^#PermitRootLogin.*$/PermitRootLogin yes/' /etc/ssh/sshd_config \
     && apt-get clean \
-    && apt-get autoclean \
-    && apt-get autoremove \
     && rm -rf /tmp/* /root/.cache /var/lib/apt/lists/*
+
+RUN mkdir -p /var/run/sshd \
+    && echo root:${ROOT_PASSWORD} | chpasswd \
+    && echo "Start Success !" \
+    && date 
     
-COPY ssh.sh /usr/local/bin/ssh.sh
-	
 EXPOSE 22/tcp
 
-ENTRYPOINT [ "bash", "/usr/local/bin/ssh.sh" ]
+CMD    ["/usr/sbin/sshd", "-D"]
