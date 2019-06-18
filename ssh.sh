@@ -8,4 +8,4 @@ mkdir -p -m 0755 /var/run/sshd
 
 echo "Start Success !"
 
-bash /usr/sbin/sshd -D -e &
+/usr/sbin/sshd -D -e &
