@@ -1,34 +1,22 @@
 {
-  "log" : {
-    "access": "/var/log/v2ray/access.log",
-    "error": "/var/log/v2ray/error.log",
-    "loglevel": "warning"
-  },
-  "inbound": {
-    "port": [VMESS_PORT],
-    "protocol": "vmess",
-    "settings": {
-      "clients": [
-        {
+  "log": { "loglevel": "warning", "access": "", "error": "" },
+  "inboundDetour": [
+    {
+      "port": 80,
+      "protocol": "vmess",
+      "settings": {
+        "clients": [ 
+          {
           "id": "[VMESS_ID]",
           "level": [VMESS_LEVEL],
           "alterId": [VMESS_ALTERID]
         }
-      ]
-    }
-  },
-  "inboundDetour": [
-    {
-      "port": [SS_PORT],
-      "protocol": "shadowsocks",
-      "settings": {
-        "method": "[SS_METHOD]",
-        "password": "[SS_PASSWORD]",
-        "network": "tcp,udp"
-      }
+        ]
+      },
+      "streamSettings": { "network": "ws", "wsSettings": { "path": "/ws", "headers": { "Origin": "" } } }
     },
     {
-      "port": [KCP_PORT_VMESS],
+      "port": 5061,
       "protocol": "vmess",
       "settings": {
         "clients": [
@@ -39,60 +27,11 @@
           }
         ]
       },
-      "streamSettings": {
-        "network": "kcp",
-        "kcpSettings": {
-          "mtu": [KCP_MUT],
-          "tti": [KCP_TTI],
-          "uplinkCapacity": [KCP_UPLINK],
-          "downlinkCapacity": [KCP_DOWNLINK],
-          "congestion": false,
-          "readBufferSize": [KCP_READBUFF],
-          "writeBufferSize": [KCP_WRITEBUFF],
-          "header": {
-            "type": "none"
-          }
-        }
-      }
+      "streamSettings": { "network": "kcp", "kcpSettings": { "header": { "type": "wechat-video" } } }
     }
   ],
-  "outbound": {
-    "protocol": "freedom",
-    "settings": {}
-  },
-  "outboundDetour": [
-    {
-      "protocol": "blackhole",
-      "settings": {},
-      "tag": "blocked"
-    }
-  ],
-  "routing": {
-    "strategy": "rules",
-    "settings": {
-      "rules": [
-        {
-          "type": "field",
-          "ip": [
-            "0.0.0.0/8",
-            "10.0.0.0/8",
-            "100.64.0.0/10",
-            "127.0.0.0/8",
-            "169.254.0.0/16",
-            "172.16.0.0/12",
-            "192.0.0.0/24",
-            "192.0.2.0/24",
-            "192.168.0.0/16",
-            "198.18.0.0/15",
-            "198.51.100.0/24",
-            "203.0.113.0/24",
-            "::1/128",
-            "fc00::/7",
-            "fe80::/10"
-          ],
-          "outboundTag": "blocked"
-        }
-      ]
-    }
+  "outbound": { "protocol": "freedom", "settings": {} },
+  "dns": {
+    "servers": [ "8.8.8.8", "8.8.4.4", "localhost" ]
   }
 }
