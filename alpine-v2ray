@@ -1,0 +1,26 @@
+FROM library/alpine:latest
+
+#system
+ARG TZ="Asia/Shanghai"
+
+ENV TZ ${TZ}
+ENV V2RAY_VERSION=v4.19.1
+
+RUN set -ex \
+    && apk --no-cache upgrade \
+    && apk add --no-cache --virtual .build-deps ca-certificates tzdata \
+    && ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime \
+    && echo ${TZ} > /etc/timezone \
+    && wget -q -O v2ray.zip https://github.com/v2ray/v2ray-core/releases/download/${V2RAY_VERSION}/v2ray-linux-64.zip \
+    | unzip -d /usr/bin/v2ray v2ray.zip v2ray v2ctl \
+    && chmod +x /usr/bin/v2ray * \
+    && apk del .build-deps \
+    
+COPY config.json /etc/v2ray/config.json
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+
+ENV VMESS_ID=754fa459-8964-4e2e-a14a-3e066e1c314f
+ENV VMESS_LEVEL=1
+ENV VMESS_ALTERID=64
+
+ENTRYPOINT [ "bash", "/usr/local/bin/entrypoint.sh" ]
